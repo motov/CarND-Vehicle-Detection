@@ -10,9 +10,9 @@ import cv2
 # If the input is the camera, pass 0 instead of the video file name
 
 #  project video
-cap = cv2.VideoCapture('project_video.mp4')
+# cap = cv2.VideoCapture('project_video.mp4')
 # test video
-# cap = cv2.VideoCapture('test_video.mp4')
+cap = cv2.VideoCapture('test_video.mp4')
 
 # create output video
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -25,7 +25,7 @@ if cap.isOpened() == False:
 finalList = []
 numFrame = 0
 heatmap = np.zeros((720, 1280), dtype=float)
-threshold = 2
+threshold = 3
 
 
 while cap.isOpened():

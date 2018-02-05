@@ -30,7 +30,7 @@ hist_bins = dist_pickle["hist_bins"]
 hog_channel = dist_pickle["hog_channel"]
 ystart = 400
 ystop = 650
-scales = [0.9, 1.2, 1.5]
+scales = [1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4]
 
 
 def find_cars(img):

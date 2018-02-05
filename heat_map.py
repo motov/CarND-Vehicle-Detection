@@ -40,7 +40,7 @@ def draw_labeled_bboxes(img, labels):
 
 
 def gen_frame_result(img, numFrame, finalList, bbox, heatmap, threshold):
-    if numFrame <= 20:
+    if numFrame <= 5:
         # add box_list to list
         finalList.append(bbox)
         if len(bbox) > 0:
