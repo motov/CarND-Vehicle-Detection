@@ -30,8 +30,10 @@ hist_bins = dist_pickle["hist_bins"]
 hog_channel = dist_pickle["hog_channel"]
 ystart = 400
 ystop = 650
+
 # scales = [0.9, 1.2, 1.5]
 scales = [0.25, 0.5, 1, 1.5, 2]
+
 
 def find_cars(img):
     bboxes = []
