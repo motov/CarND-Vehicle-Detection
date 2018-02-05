@@ -25,7 +25,7 @@ if cap.isOpened() == False:
 finalList = []
 numFrame = 0
 heatmap = np.zeros((720, 1280), dtype=float)
-threshold = 5
+threshold = 2
 
 
 while cap.isOpened():
