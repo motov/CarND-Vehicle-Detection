@@ -10,9 +10,9 @@ import cv2
 # If the input is the camera, pass 0 instead of the video file name
 
 #  project video
-# cap = cv2.VideoCapture('project_video.mp4')
+cap = cv2.VideoCapture('project_video.mp4')
 # test video
-cap = cv2.VideoCapture('test_video.mp4')
+# cap = cv2.VideoCapture('test_video.mp4')
 
 # create output video
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -24,8 +24,9 @@ if cap.isOpened() == False:
 
 finalList = []
 numFrame = 0
+imgResult = []
 heatmap = np.zeros((720, 1280), dtype=float)
-threshold = 3
+threshold = 2
 
 
 while cap.isOpened():
@@ -42,10 +43,28 @@ while cap.isOpened():
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         bbox = find_cars(frame)
 
-        imgResult, heatmap, finalList = gen_frame_result(frame, numFrame, finalList, bbox, heatmap, threshold)
+        # imgResult, heatmap, finalList = gen_frame_result(frame, numFrame, finalList, bbox, heatmap, threshold)
+        # imgResult, heatmap, finalList = gen_frame_result2(frame, numFrame, finalList, bbox, heatmap, threshold, imgResult)
+
+        if len(bbox) > 0:
+            for boxlist in bbox:
+                for box in boxlist:
+                    if len(box) > 0:
+                        heatmap[box[1]:box[3], box[0]:box[2]] += 1
+
+        print("bbox", bbox)
+        print("heat", heatmap)
+
+        heatmap = apply_threshold(heatmap, threshold)
+        heatmapSh = np.clip(heatmap, 0, 255)
+        print("heatmapSH", heatmapSh)
+        # draw_labeled_bboxes
+        labels = label(heatmapSh)
+        imgResult = draw_labeled_bboxes(frame, labels)
+
 
         # save current frame
-        imgResult = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        imgResult = cv2.cvtColor(imgResult, cv2.COLOR_RGB2BGR)
         out.write(imgResult)
 
         # Display the resulting frame
@@ -64,3 +83,25 @@ cap.release()
 out.release()
 # Closes all the frames
 cv2.destroyAllWindows()
+
+
+def gen_frame_result2(img, numFrame, finalList, bbox, threshold, imgResult):
+
+    if len(bbox) > 0:
+        for boxlist in bbox:
+            for box in boxlist:
+                if len(box) > 0:
+                    this.heatmap[box[1]:box[3], box[0]:box[2]] += 1
+
+    print("bbox", bbox)
+    print("heat", heatmap)
+    # if imgResult is None or len(imgResult) == 0:
+    #     imgResult = np.copy(img)
+
+    # if numFrame % 5 == 0:
+    heatmap = apply_threshold(heatmap, threshold)
+    heatmapSh = np.clip(heatmap, 0, 255)
+    # draw_labeled_bboxes
+    labels = label(heatmapSh)
+    imgResult = draw_labeled_bboxes(img, labels)
+    return imgResult, heatmap, finalList

@@ -5,6 +5,9 @@ import pickle
 import cv2
 from scipy.ndimage.measurements import label
 
+# imgResult = []
+heatmap = np.zeros((720, 1280), dtype=float)
+
 def add_heat(heatmap, bbox_list):
     # Iterate through list of bboxes
     for box in bbox_list:
@@ -40,14 +43,16 @@ def draw_labeled_bboxes(img, labels):
 
 
 def gen_frame_result(img, numFrame, finalList, bbox, heatmap, threshold):
-    if numFrame <= 5:
+    imgResult = img
+    if numFrame <= 20:
         # add box_list to list
         finalList.append(bbox)
         if len(bbox) > 0:
             for boxlist in bbox:
                 for box in boxlist:
-                    heatmap[box[1]:box[3], box[0]:box[2]] += 1
-        imgResult = img
+                    if len(box) > 0:
+                        heatmap[box[1]:box[3], box[0]:box[2]] += 1
+        # imgResult = img
     else:
         # delete old list, add new list, apply threshold
         oldList = finalList.pop(0)
@@ -55,15 +60,44 @@ def gen_frame_result(img, numFrame, finalList, bbox, heatmap, threshold):
         if len(oldList) > 0:
             for boxlist in oldList:
                 for box in boxlist:
-                    heatmap[box[1]:box[3], box[0]:box[2]] -= 1
+                    if len(box) > 0:
+                        heatmap[box[1]:box[3], box[0]:box[2]] -= 1
         if len(bbox) > 0:
             for boxlist in bbox:
                 for box in boxlist:
-                    heatmap[box[1]:box[3], box[0]:box[2]] += 1
+                    if len(box) > 0:
+                        heatmap[box[1]:box[3], box[0]:box[2]] += 1
+        print("bbox", bbox)
+        print("heatmap", heatmap)
+
+    if numFrame % 5 == 0:
         heatmapSh = apply_threshold(heatmap, threshold)
 
         # draw_labeled_bboxes
         labels = label(heatmapSh)
+        # labels = label(heatmap)
         imgResult = draw_labeled_bboxes(img, labels)
 
+    return imgResult, heatmap, finalList
+
+
+def gen_frame_result2(img, numFrame, finalList, bbox, threshold, imgResult):
+
+    if len(bbox) > 0:
+        for boxlist in bbox:
+            for box in boxlist:
+                if len(box) > 0:
+                    this.heatmap[box[1]:box[3], box[0]:box[2]] += 1
+
+    print("bbox", bbox)
+    print("heat", heatmap)
+    # if imgResult is None or len(imgResult) == 0:
+    #     imgResult = np.copy(img)
+
+    # if numFrame % 5 == 0:
+    heatmap = apply_threshold(heatmap, threshold)
+    heatmapSh = np.clip(heatmap, 0, 255)
+    # draw_labeled_bboxes
+    labels = label(heatmapSh)
+    imgResult = draw_labeled_bboxes(img, labels)
     return imgResult, heatmap, finalList
