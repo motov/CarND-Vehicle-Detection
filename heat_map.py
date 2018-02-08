@@ -5,6 +5,8 @@ import pickle
 import cv2
 from scipy.ndimage.measurements import label
 
+heatmapSh = np.zeros((720, 1280), dtype=float)
+
 def add_heat(heatmap, bbox_list):
     # Iterate through list of bboxes
     for box in bbox_list:
@@ -40,7 +42,7 @@ def draw_labeled_bboxes(img, labels):
 
 
 def gen_frame_result(img, numFrame, finalList, bbox, heatmap, threshold):
-    if numFrame <= 5:
+    if numFrame <= 15:
         # add box_list to list
         finalList.append(bbox)
         if len(bbox) > 0:
