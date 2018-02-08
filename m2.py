@@ -23,7 +23,7 @@ if cap.isOpened() == False:
     print("Error opening video stream or file")
 
 finalList = []
-imgResult = np.zeros((3, 720, 1280), dtype=float)
+imgResult = np.zeros((720, 1280, 3), dtype=float)
 numFrame = 0
 heatmap = np.zeros((720, 1280), dtype=float)
 bbox = []
