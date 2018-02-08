@@ -10,13 +10,13 @@ import cv2
 # If the input is the camera, pass 0 instead of the video file name
 
 #  project video
-# cap = cv2.VideoCapture('project_video_cut.mp4')
+cap = cv2.VideoCapture('project_video.mp4')
 # test video
-cap = cv2.VideoCapture('test_video.mp4')
+# cap = cv2.VideoCapture('test_video.mp4')
 
 # create output video
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter('project_cut_result.mp4',fourcc, 25.0, (1280,720))
+out = cv2.VideoWriter('project_result.mp4',fourcc, 25.0, (1280,720))
 
 # Check if camera opened successfully
 if cap.isOpened() == False:
@@ -28,7 +28,7 @@ numFrame = 0
 heatmap = np.zeros((720, 1280), dtype=float)
 bbox = []
 hashmapSh = np.zeros((720, 1280), dtype=float)
-threshold = 2
+threshold = 3
 
 
 while cap.isOpened():
@@ -58,7 +58,7 @@ while cap.isOpened():
             imgResult = frame
 
         # update heatmap so that it sums latest 10 frames of boxes.
-        if numFrame <= 3:
+        if numFrame <= 1:
             # add box_list to list
             finalList.append(bbox)
             if len(bbox) > 0:
@@ -76,11 +76,11 @@ while cap.isOpened():
                 for boxlist in bbox:
                     for box in boxlist:
                         heatmap[box[1]:box[3], box[0]:box[2]] += 1
-            if numFrame % 3 == 1:
-                heatmapSh = apply_threshold(np.copy(heatmap), threshold)
-                # draw_labeled_bboxes
-                labels = label(heatmapSh)
-                imgResult = draw_labeled_bboxes(frame, labels)
+        # if numFrame % 2 == 1:
+            heatmapSh = apply_threshold(np.copy(heatmap), threshold)
+            # draw_labeled_bboxes
+            labels = label(heatmapSh)
+            imgResult = draw_labeled_bboxes(frame, labels)
             # plt.imshow(imgResult)
             # plt.show()
 

@@ -31,7 +31,7 @@ hog_channel = dist_pickle["hog_channel"]
 ystart = 400
 ystop = 650
 
-scales = [0.9, 1.2, 1.5]
+scales = [1, 1.3, 1.6, 1.9, 2.2, 2.5]
 # scales = [0.25, 1, 1.5]
 
 
